@@ -1,0 +1,30 @@
+--- ./conf/carbon.conf.example.orig	2013-09-22 08:48:53.629896254 -0600
++++ ./conf/carbon.conf.example	2013-09-22 08:49:09.128400534 -0600
+@@ -36,7 +36,7 @@
+ # Specify the user to drop privileges to
+ # If this is blank carbon runs as the user that invokes it
+ # This user must have write access to the local data directory
+-USER =
++USER = carbon
+ #
+ # NOTE: The above settings must be set under [relay] and [aggregator]
+ #       to take effect for those daemons as well
+--- ./setup.cfg.orig	2013-09-22 09:16:52.026671798 -0600
++++ ./setup.cfg	2013-09-22 09:07:47.321706108 -0600
+@@ -1,9 +1,9 @@
+-[install]
+-prefix = /opt/graphite
+-install-lib = %(prefix)s/lib
++#[install]
++#prefix = /opt/graphite
++#install-lib = %(prefix)s/lib
+ 
+-[bdist_rpm]
+-requires = python-twisted
+-           whisper
++#[bdist_rpm]
++#requires = python-twisted
++#           whisper
+ 
+-post-install = distro/redhat/misc/postinstall
++#post-install = distro/redhat/misc/postinstall
