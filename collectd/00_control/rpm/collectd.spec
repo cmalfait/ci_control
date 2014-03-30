@@ -1449,7 +1449,6 @@ fi
 %{_datadir}/collectd/
 %{_sharedstatedir}/collectd
 %{_sysconfdir}/collectd.d
-%{_sysconfdir}/logrotate.d/collectd_log
 %{_mandir}/man1/collectd-nagios.1*
 %{_mandir}/man1/collectd.1*
 %{_mandir}/man1/collectdctl.1*
