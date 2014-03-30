@@ -109,6 +109,8 @@ if [ $1 -eq 0 ] ; then
 semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/lib/graphite-web(/.*)?' 2>/dev/null || :
 fi
 
+%[__rm} %{_sysconfdir}/graphite-web/local_settings.pyc
+%{__rm} %{_sysconfdir}/graphite-web/local_settings.pyo
 
 %files
 %doc README.fedora LICENSE conf/* examples/*
@@ -117,8 +119,6 @@ fi
 %config(noreplace) %{_sysconfdir}/logrotate.d/graphite-web
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/graphite-web/local_settings.py
-%[__rm} %{_sysconfdir}/graphite-web/local_settings.pyc
-%{__rm} %{_sysconfdir}/graphite-web/local_settings.pyo
 %config(noreplace) %{_sysconfdir}/graphite-web/dashboard.conf
 %attr(-,apache,apache) %dir %{_localstatedir}/log/graphite-web
 %attr(-,apache,apache) %dir %{_sharedstatedir}/graphite-web
