@@ -117,8 +117,8 @@ fi
 %config(noreplace) %{_sysconfdir}/logrotate.d/graphite-web
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/graphite-web/local_settings.py
-%config(noreplace) %{_sysconfdir}/graphite-web/local_settings.pyc
-%config(noreplace) %{_sysconfdir}/graphite-web/local_settings.pyo
+%[__rm} %{_sysconfdir}/graphite-web/local_settings.pyc
+%{__rm} %{_sysconfdir}/graphite-web/local_settings.pyo
 %config(noreplace) %{_sysconfdir}/graphite-web/dashboard.conf
 %attr(-,apache,apache) %dir %{_localstatedir}/log/graphite-web
 %attr(-,apache,apache) %dir %{_sharedstatedir}/graphite-web
