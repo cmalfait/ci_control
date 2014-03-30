@@ -100,6 +100,10 @@ popd
 %{__rm} -rf %{buildroot}%{python_sitelib}/graphite/thirdparty
 
 
+# Ensure c and o files are not present 
+%{__rm} -rf %{buildroot}%{_sysconfdir}/graphite-web/*.pyc
+%{__rm} -rf %{buildroot}%{_sysconfdir}/graphite-web/*.pyo
+
 %post selinux
 semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/lib/graphite-web(/.*)?' 2>/dev/null || :
 restorecon -R %{_localstatedir}/lib/graphite-web || :
