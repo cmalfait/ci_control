@@ -142,11 +142,13 @@ diff -up ./webapp/graphite/settings.py.orig ./webapp/graphite/settings.py
 diff -up ./webapp/graphite/local_settings.py.example.orig ./webapp/graphite/local_settings.py.example
 --- ./webapp/graphite/local_settings.py.example.orig	2012-05-31 00:28:54.000000000 -0600
 +++ ./webapp/graphite/local_settings.py.example	2012-11-24 14:10:08.313633288 -0700
-#####################################
+@@ -54,29 +54,29 @@
+ #####################################
  # Change only GRAPHITE_ROOT if your install is merely shifted from /opt/graphite
+ # to somewhere else
 -#GRAPHITE_ROOT = '/opt/graphite'
 +GRAPHITE_ROOT = '/usr/share/graphite'
-
+ 
  # Most installs done outside of a separate tree such as /opt/graphite will only
  # need to change these three settings. Note that the default settings for each
  # of these is relative to GRAPHITE_ROOT
@@ -156,7 +158,7 @@ diff -up ./webapp/graphite/local_settings.py.example.orig ./webapp/graphite/loca
 +CONF_DIR = '/etc/graphite-web'
 +STORAGE_DIR = '/var/lib/graphite-web'
 +CONTENT_DIR = '/usr/share/graphite/webapp/content'
-
+ 
  # To further or fully customize the paths, modify the following. Note that the
  # default settings for each of these are relative to CONF_DIR and STORAGE_DIR
  #
@@ -165,7 +167,7 @@ diff -up ./webapp/graphite/local_settings.py.example.orig ./webapp/graphite/loca
 -#GRAPHTEMPLATES_CONF = '/opt/graphite/conf/graphTemplates.conf'
 +#DASHBOARD_CONF = '/etc/graphite-web/dashboard.conf'
 +#GRAPHTEMPLATES_CONF = '/etc/graphite-web/graphTemplates.conf'
-
+ 
  ## Data directories
  # NOTE: If any directory is unreadable in DATA_DIRS it will break metric browsing
 -#WHISPER_DIR = '/opt/graphite/storage/whisper'
@@ -178,6 +180,6 @@ diff -up ./webapp/graphite/local_settings.py.example.orig ./webapp/graphite/loca
 +DATA_DIRS = [WHISPER_DIR, RRD_DIR] # Default: set from the above variables
 +LOG_DIR = '/var/log/graphite-web'
 +INDEX_FILE = '/var/lib/graphite-web/index'  # Search index file
-
-
+ 
+ 
  #####################################
