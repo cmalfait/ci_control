@@ -1377,14 +1377,12 @@ rm -rf %{buildroot}
 
 %{__mkdir} -p %{buildroot}%{_localstatedir}/www
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/httpd/conf.d
-%{__mkdir} -p %{buildroot}/%{_sysconfdir}/logrotate.d
 
 %{__cp} -a contrib/collection3 %{buildroot}%{_localstatedir}/www
 %{__cp} -a contrib/redhat/collection3.conf %{buildroot}/%{_sysconfdir}/httpd/conf.d/
 
 %{__cp} -a contrib/php-collection %{buildroot}%{_localstatedir}/www
 %{__cp} -a contrib/redhat/php-collection.conf %{buildroot}/%{_sysconfdir}/httpd/conf.d/
-%{__cp} -a contrib/collectd_log %{buildroot}/%{_sysconfdir}/logrotate.d
 
 ### Clean up docs
 find contrib/ -type f -exec %{__chmod} a-x {} \;
