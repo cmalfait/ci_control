@@ -1,4 +1,5 @@
 Name:           graphite-web
+
 Version:        0.9.12
 Release:        1%{?dist}
 Summary:        A Django webapp for enterprise scalable realtime graphing
@@ -62,6 +63,8 @@ SELinux labeling for graphite files.
 
 %build
 %{__python} setup.py build
+%{__rm} %{buildroot}%{_sysconfdir}/graphite-web/local_settings.pyc
+%{__rm} %{buildroot}%{_sysconfdir}/graphite-web/local_settings.pyo
 
 %install
 rm -rf %{buildroot}
@@ -101,8 +104,8 @@ popd
 
 
 # Ensure c and o files are not present 
-%{__rm} -rf %{buildroot}%{_sysconfdir}/graphite-web/*.pyc
-%{__rm} -rf %{buildroot}%{_sysconfdir}/graphite-web/*.pyo
+%{__rm} %{buildroot}%{_sysconfdir}/graphite-web/local_settings.pyc
+%{__rm} %{buildroot}%{_sysconfdir}/graphite-web/local_settings.pyo
 
 %post selinux
 semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/lib/graphite-web(/.*)?' 2>/dev/null || :
