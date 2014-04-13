@@ -9,7 +9,7 @@ License: GPLv2
 Group: System Environment/Daemons
 URL: http://collectd.org/
 
-Source: http://collectd.org/files/%{name}-%{version}.tar.bz2
+Source: http://collectd.org/files/%{name}-%{version}.tar.gz
 Source1: collectd-httpd.conf
 Source2: collection.conf
 Source3: collectd.service
