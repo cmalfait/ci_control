@@ -393,17 +393,6 @@ BuildRequires: protobuf-c-devel
 %description write_riemann
 This plugin can send data to Riemann.
 
-
-%package xmms
-Summary:       XMMS plugin for collectd
-Group:         System Environment/Daemons
-Requires:      collectd = %{version}-%{release}
-BuildRequires: xmms-devel
-%description xmms
-This is a collectd plugin for the XMMS music player.
-It graphs the bit-rate and sampling rate as you play songs.
-
-
 %prep
 %setup -q
 %patch0 -p1
@@ -817,10 +806,6 @@ rm -f %{buildroot}/%{_libdir}/{collectd/,}*.la
 
 %files write_riemann
 %{_libdir}/collectd/write_riemann.so
-
-
-%files xmms
-%{_libdir}/collectd/xmms.so
 
 
 %changelog
