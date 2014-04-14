@@ -27,9 +27,9 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: python-devel
 BuildRequires: libgcrypt-devel
-Requires(post):   chkconfig
-Requires(preun):  chkconfig, initscripts
-Requires(postun): initscripts
+Requires(post):   systemd
+Requires(preun):  systemd
+Requires(postun): systemd
 
 %description
 collectd is a small daemon written in C for performance.  It reads various
@@ -441,7 +441,7 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
 %{__make} install DESTDIR="%{buildroot}"
 
 %{__install} -Dp -m0644 src/collectd.conf %{buildroot}%{_sysconfdir}/collectd.conf
-%{__install} -Dp -m 0755 contrib/redhat/init.d-collectd %{buildroot}%{_initrddir}/collectd
+%{__install} -Dp -m0644 %{SOURCE3} %{buildroot}%{_unitdir}/collectd.service
 %{__install} -d -m0755 %{buildroot}%{_localstatedir}/lib/collectd/rrd
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
 %{__install} -d -m0755 %{buildroot}/%{_sysconfdir}/httpd/conf.d/
@@ -526,7 +526,7 @@ rm -f %{buildroot}/%{_libdir}/{collectd/,}*.la
 %exclude %{_sysconfdir}/collectd.d/sensors.conf
 %exclude %{_sysconfdir}/collectd.d/snmp.conf
 
-%{_initrddir}/collectd
+%{_unitdir}/collectd.service
 %{_bindir}/collectd-nagios
 %{_bindir}/collectdctl
 %{_bindir}/collectd-tg
@@ -765,6 +765,10 @@ rm -f %{buildroot}/%{_libdir}/{collectd/,}*.la
 %{_libdir}/collectd/postgresql.so
 %config(noreplace) %{_sysconfdir}/collectd.d/postgresql.conf
 %{_datadir}/collectd/postgresql_default.conf
+
+
+%files rrdcached
+%{_libdir}/collectd/rrdcached.so
 
 
 %files rrdtool
