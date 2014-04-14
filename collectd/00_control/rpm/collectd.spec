@@ -410,6 +410,7 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
     --disable-mic \
     --disable-netapp \
     --disable-xmms \
+    --disable-rrdcached \
 %ifarch s390 s390x
     --disable-nut \
 %endif
