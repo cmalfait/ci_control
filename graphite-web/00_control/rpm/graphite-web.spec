@@ -1,3 +1,4 @@
+%define _unpackaged_files_terminate_build 0
 Name:           graphite-web
 
 Version:        0.9.12
@@ -99,8 +100,6 @@ popd
 
 # Don't ship thirdparty
 %{__rm} -rf %{buildroot}%{python_sitelib}/graphite/thirdparty
-%{__rm} -rf %{_sysconfdir}/graphite-web/local_settings.pyc
-%{__rm} -rf %{_sysconfdir}/graphite-web/local_settings.pyo
 
 %post selinux
 semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/lib/graphite-web(/.*)?' 2>/dev/null || :
@@ -119,8 +118,6 @@ fi
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/graphite-web/local_settings.py
 %config(noreplace) %{_sysconfdir}/graphite-web/dashboard.conf
-#%exclude %{_sysconfdir}/graphite-web/local_settings.pyc
-#%exclude %{_sysconfdir}/graphite-web/local_settings.pyo
 %attr(-,apache,apache) %dir %{_localstatedir}/log/graphite-web
 %attr(-,apache,apache) %dir %{_sharedstatedir}/graphite-web
 
