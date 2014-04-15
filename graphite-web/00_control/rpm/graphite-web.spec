@@ -99,6 +99,8 @@ popd
 
 # Don't ship thirdparty
 %{__rm} -rf %{buildroot}%{python_sitelib}/graphite/thirdparty
+%{__rm} -rf %{_sysconfdir}/graphite-web/local_settings.pyc
+%{__rm} -rf %{_sysconfdir}/graphite-web/local_settings.pyo
 
 %post selinux
 semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/lib/graphite-web(/.*)?' 2>/dev/null || :
@@ -108,7 +110,6 @@ restorecon -R %{_localstatedir}/lib/graphite-web || :
 if [ $1 -eq 0 ] ; then
 semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/lib/graphite-web(/.*)?' 2>/dev/null || :
 fi
-
 
 %files
 %doc README.fedora LICENSE conf/* examples/*
