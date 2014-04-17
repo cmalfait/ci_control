@@ -442,7 +442,7 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
 %{__make} install DESTDIR="%{buildroot}"
 
 %{__install} -Dp -m0644 src/collectd.conf %{buildroot}%{_sysconfdir}/collectd.conf
-%{__install} -Dp -m 0755 ${SOURCE4} %{buildroot}%{_initrddir}/collectd
+%{__install} -Dp -m 0755 %{SOURCE4} %{buildroot}%{_initrddir}/collectd
 %{__install} -d -m0755 %{buildroot}%{_localstatedir}/lib/collectd/rrd
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
 %{__install} -d -m0755 %{buildroot}/%{_sysconfdir}/httpd/conf.d/

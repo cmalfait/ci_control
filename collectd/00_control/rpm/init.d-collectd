@@ -19,7 +19,7 @@ service="collectd"
 CONFIG=/etc/collectd.conf
 COLLECTD=/usr/sbin/collectd
 COLLECTDMONPIDDIR="/var/run"
-COLLECTDMONPID="$COLLECTDMONPIDDIR/collectdmon.pid"
+COLLECTDMONPID="$COLLECTDMONPIDDIR/collectd.pid"
 
 if [ -r /etc/sysconfig/$service ]; then
 	. /etc/sysconfig/$service
