@@ -13,6 +13,7 @@ Source: http://collectd.org/files/%{name}-%{version}.tar.gz
 Source1: collectd-httpd.conf
 Source2: collection.conf
 Source3: collectd.service
+Source4: init.d-collectd
 Source91: apache.conf
 Source92: email.conf
 Source93: mysql.conf
@@ -441,7 +442,7 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
 %{__make} install DESTDIR="%{buildroot}"
 
 %{__install} -Dp -m0644 src/collectd.conf %{buildroot}%{_sysconfdir}/collectd.conf
-%{__install} -Dp -m 0755 contrib/redhat/init.d-collectd %{buildroot}%{_initrddir}/collectd
+%{__install} -Dp -m 0755 ${SOURCE4} %{buildroot}%{_initrddir}/collectd
 %{__install} -d -m0755 %{buildroot}%{_localstatedir}/lib/collectd/rrd
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
 %{__install} -d -m0755 %{buildroot}/%{_sysconfdir}/httpd/conf.d/
