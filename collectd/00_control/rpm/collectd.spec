@@ -494,17 +494,20 @@ rm -f %{buildroot}/%{_libdir}/{collectd/,}*.la
 
 %post
 /sbin/ldconfig
-%systemd_post collectd.service
+/sbin/chkconfig --add collectd
 
 
 %preun
-%systemd_preun collectd.service
-
+if [ $1 -eq 0 ]; then
+        /sbin/service collectd stop &>/dev/null
+        /sbin/chkconfig --del collectd
+fi
 
 %postun
 /sbin/ldconfig
-%systemd_postun_with_restart collectd.service
-
+if [ $1 -ge 1 ]; then
+        /sbin/service collectd condrestart &>/dev/null || :
+fi
 
 %files
 %config(noreplace) %{_sysconfdir}/collectd.conf
