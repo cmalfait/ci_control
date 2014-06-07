@@ -1,0 +1,17 @@
+#Package name
+PKG_NAME=grafana
+
+#Package version (for the original source)
+PKG_VERSION=1.5.4
+
+# Current Ubuntu debian control tarball (if the debian folder is absent we'll use this)
+DEBIAN_CTRL_TARBALL=(n/a)
+
+# Current Ubuntu debian basis:
+DEBIAN_CTRL_URL=(n/a)
+
+# rpm specific parameters
+RPM_CTRL_SPECFILE=grafana.spec
+RPM_ARCH=noarch
+RPM_CTRL_TARBALL=
+RPM_CTRL_URL=
