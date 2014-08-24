@@ -12,6 +12,5 @@ DEBIAN_CTRL_URL=(n/a)
 
 # rpm specific parameters
 RPM_CTRL_SPECFILE=kibana.spec
-RPM_ARCH=noarch
 RPM_CTRL_TARBALL=
 RPM_CTRL_URL=
