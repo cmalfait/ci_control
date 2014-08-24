@@ -34,8 +34,8 @@ straight-forward, and extensible.
 
 
 %prep
-%setup -q -n ruby-%{version}
-
+%setup -q
+autoconf
 
 %build
 
