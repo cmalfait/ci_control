@@ -1,5 +1,5 @@
 %define _prefix /opt/%{name}
-%define _mandir /opt/%{name}/share/man
+#%define _mandir /opt/%{name}/usr/share/man
 
 %global _hardened_build 1
 %global __provides_exclude_from ^%{_libdir}/collectd/.*\\.so$
@@ -27,8 +27,8 @@ Source97: rrdtool.conf
 
 Patch0: %{name}-include-collectd.d.patch
 
-BuildRequires: perl-ExtUtils-MakeMaker
-BuildRequires: perl-ExtUtils-Embed
+BuildRequires: perl(ExtUtils::MakeMaker)
+BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: python-devel
 BuildRequires: libgcrypt-devel
 Requires(post):   chkconfig
@@ -399,6 +399,7 @@ This plugin can send data to Riemann.
 
 %prep
 %setup -q
+./build.sh
 %patch0 -p1
 
 sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
@@ -435,7 +436,7 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
     --with-libiptc \
     --with-java=%{java_home}/ \
     --with-python \
-    --with-perl-bindings=/opt/collectd/share/perl5
+    --with-perl-bindings=INSTALLDIRS=vendor
 
 %{__make} %{?_smp_mflags}
 
@@ -459,8 +460,10 @@ find %{buildroot} -name perllocal.pod -exec rm {} \;
 
 # copy web interface
 cp -ad contrib/collection3/* %{buildroot}/%{_datadir}/collectd/collection3/
+rm -f %{buildroot}/%{_datadir}/collectd/collection3/etc/collection.conf
 cp %{SOURCE1} %{buildroot}/%{_sysconfdir}/httpd/conf.d/collectd.conf
 cp %{SOURCE2} %{buildroot}%{_sysconfdir}/collection.conf
+ln -s %{_sysconfdir}/collection.conf %{buildroot}/%{_datadir}/collectd/collection3/etc/collection.conf
 chmod +x %{buildroot}/%{_datadir}/collectd/collection3/bin/*.cgi
 
 # Move the Perl examples to a separate directory.
@@ -748,22 +751,13 @@ fi
 
 
 %files -n perl-Collectd
-%config(noreplace) %{_sysconfdir}/collectd.d/perl.conf
-%{_libdir}/collectd/perl.so
 %doc perl-examples/*
+%{_libdir}/collectd/perl.so
+%{perl_vendorlib}/Collectd.pm
+%{perl_vendorlib}/Collectd/
+%config(noreplace) %{_sysconfdir}/collectd.d/perl.conf
 %doc %{_mandir}/man5/collectd-perl.5*
-/usr/local/share/man/man3/Collectd::Unixsock.3pm
-/usr/local/share/perl5/Collectd.pm
-/usr/local/share/perl5/Collectd/Plugins/OpenVZ.pm
-/usr/local/share/perl5/Collectd/Unixsock.pm
-
-#%doc perl-examples/*
-#%{_libdir}/collectd/perl.so
-#%{perl_vendorlib}/Collectd.pm
-#%{perl_vendorlib}/Collectd/
-#%config(noreplace) %{_sysconfdir}/collectd.d/perl.conf
-#%doc %{_mandir}/man5/collectd-perl.5*
-#%doc %{_mandir}/man3/Collectd::Unixsock.3pm*
+%doc /usr/share/man/man3/Collectd::Unixsock.3pm*
 
 
 %files pinba
