@@ -1,28 +1,35 @@
-Name:           grafana 
-Version:        1.5.4
-Release:        1%{?dist}
-Summary:        An open source, feature rich metrics dashboard and graph editor for Graphite & InfluxDB. 
-
-Group:          Development/Libraries
-License:        ASL 2.0
-URL:            http://grafana.org/ 
-
-Source0:        http://grafanarel.s3.amazonaws.com/grafana-1.5.4.tar.gz 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
-BuildArch:      noarch
+Summary: Grafana - An open source, feature rich metrics dashboard and graph editor for Graphite, InfluxDB & OpenTSDB. 
+Name: grafana
+Version: 1.7.0
+Release: 1 
+License: GPL
+Group: Applications
+Source: http://grafanarel.s3.amazonaws.com/grafana-1.7.0.tar.gz
+URL: http://grafana.org/  
+Distribution: CentOS Linux
+Vendor: Grafana 
+Packager: Chad Malfait<chad.malfait@autodesk.com>
 
 %description
-An open source, feature rich metrics dashboard and graph editor for Graphite & InfluxDB. 
+An open source, feature rich metrics dashboard and graph editor for Graphite, InfluxDB & OpenTSDB.
 
 %prep
+rm -rf %{_builddir}/grafana*
+rm -rf %{_buildroot}/grafana*
 
-%setup 
+%setup -q
 
 %build
+mkdir -p %{buildroot}/var/www/html/grafana
+cp -r %{_builddir}/grafana*/* %{buildroot}/var/www/html/grafana
 
 %install
- 
-%files
 
-%changelog
+%clean
+
+%post
+
+%files
+/var/www/html/*
+
+%dir 
