@@ -1,0 +1,17 @@
+#Package name
+PKG_NAME=sensu-ruby
+
+#Package version (for the original source)
+PKG_VERSION=2.1.2
+
+# Current Ubuntu debian control tarball (if the debian folder is absent we'll use this)
+DEBIAN_CTRL_TARBALL=(n/a)
+
+# Current Ubuntu debian basis:
+DEBIAN_CTRL_URL=(n/a)
+
+# rpm specific parameters
+RPM_CTRL_SPECFILE=ruby.spec
+RPM_ARCH=x86_64
+RPM_CTRL_TARBALL=
+RPM_CTRL_URL=

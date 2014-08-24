@@ -1,0 +1,14 @@
+Source: collectd
+Section: admin
+Priority: extra
+Maintainer: Chad Malfait <cmalfait@cisco.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.2
+Homepage: http://collectd.org 
+#Vcs-Git: git://git.debian.org/collab-maint/collectd.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/collectd.git;a=summary
+
+Package: collectd
+Architecture: all
+Depends: ${misc:Depends}, libltdl7
+Description: collectd is a daemon which collects system performance statistics periodically and provides mechanisms to store the values in a variety of ways, for example in RRD files.

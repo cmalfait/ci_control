@@ -1,0 +1,5 @@
+collectd (5.1.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- unknown <cmalfait@unknown>  Sun, 04 Nov 2012 21:03:02 -0800
