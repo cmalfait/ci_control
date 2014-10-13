@@ -1,0 +1,16 @@
+#Package name
+PKG_NAME=collectd-deploy
+
+#Package version (for the original source)
+PKG_VERSION=0.1.0
+
+# Current Ubuntu debian control tarball (if the debian folder is absent we'll use this)
+DEBIAN_CTRL_TARBALL=(n/a)
+
+# Current Ubuntu debian basis:
+DEBIAN_CTRL_URL=(n/a)
+
+# rpm specific parameters
+RPM_CTRL_SPECFILE=collectd-deploy.spec
+RPM_CTRL_TARBALL=
+RPM_CTRL_URL=
