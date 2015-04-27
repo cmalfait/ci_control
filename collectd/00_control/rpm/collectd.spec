@@ -4,25 +4,29 @@
 Summary: Statistics collection daemon for filling RRD files
 Name: collectd
 Version: 5.4.1
-Release: 4%{?dist}
+Release: 7%{?dist}
 License: GPLv2
 Group: System Environment/Daemons
 URL: http://collectd.org/
 
 Source: http://collectd.org/files/%{name}-%{version}.tar.gz
-Source1: collectd-httpd.conf
-Source2: collection.conf
 Source3: collectd.service
 Source4: init.d-collectd
-Source91: apache.conf
-Source92: email.conf
-Source93: mysql.conf
-Source94: nginx.conf
-Source95: sensors.conf
-Source96: snmp.conf
-Source97: rrdtool.conf
-
-Patch0: %{name}-include-collectd.d.patch
+Source5: collectd.conf
+Source6: collectd.logrotate
+Source80: aggregation.conf
+Source81: cpu.conf
+Source82: df.conf
+Source83: disk.conf
+Source84: interface.conf
+Source85: load.conf
+Source86: logfile.conf
+Source87: memory.conf
+Source89: processes.conf
+Source90: statsd.conf
+Source91: swap.conf
+Source92: tcpconns.conf
+Source93: thresholds.conf
 
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
@@ -395,9 +399,11 @@ BuildRequires: protobuf-c-devel
 This plugin can send data to Riemann.
 
 %prep
+rm -rf %{_builddir}/*
+rm -rf %{buildroot}/*
+
 %setup -q
 ./build.sh
-%patch0 -p1
 
 sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
 
@@ -442,11 +448,11 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
 %{__rm} -rf contrib/SpamAssassin
 %{__make} install DESTDIR="%{buildroot}"
 
-%{__install} -Dp -m0644 src/collectd.conf %{buildroot}%{_sysconfdir}/collectd.conf
 %{__install} -Dp -m 0755 %{SOURCE4} %{buildroot}%{_initrddir}/collectd
 %{__install} -d -m0755 %{buildroot}%{_localstatedir}/lib/collectd/rrd
 %{__install} -d -m0755 %{buildroot}/%{_datadir}/collectd/collection3/
 %{__install} -d -m0755 %{buildroot}/%{_sysconfdir}/httpd/conf.d/
+%{__install} -d -m0755 %{buildroot}/%{_sysconfdir}/logrotate.d/
 
 find contrib/ -type f -exec %{__chmod} a-x {} \;
 
@@ -455,48 +461,34 @@ find %{buildroot} -name .packlist -exec rm {} \;
 # Remove Perl temporary file perllocal.pod
 find %{buildroot} -name perllocal.pod -exec rm {} \;
 
-# copy web interface
-cp -ad contrib/collection3/* %{buildroot}/%{_datadir}/collectd/collection3/
-rm -f %{buildroot}/%{_datadir}/collectd/collection3/etc/collection.conf
-cp %{SOURCE1} %{buildroot}/%{_sysconfdir}/httpd/conf.d/collectd.conf
-cp %{SOURCE2} %{buildroot}%{_sysconfdir}/collection.conf
-ln -s %{_sysconfdir}/collection.conf %{buildroot}/%{_datadir}/collectd/collection3/etc/collection.conf
-chmod +x %{buildroot}/%{_datadir}/collectd/collection3/bin/*.cgi
-
 # Move the Perl examples to a separate directory.
 mkdir perl-examples
 find contrib -name '*.p[lm]' -exec mv {} perl-examples/ \;
 
 # Move config contribs
-mkdir -p %{buildroot}%{_sysconfdir}/collectd.d/
-cp %{SOURCE91} %{buildroot}%{_sysconfdir}/collectd.d/apache.conf
-cp %{SOURCE92} %{buildroot}%{_sysconfdir}/collectd.d/email.conf
-cp %{SOURCE93} %{buildroot}%{_sysconfdir}/collectd.d/mysql.conf
-cp %{SOURCE94} %{buildroot}%{_sysconfdir}/collectd.d/nginx.conf
-cp %{SOURCE95} %{buildroot}%{_sysconfdir}/collectd.d/sensors.conf
-cp %{SOURCE96} %{buildroot}%{_sysconfdir}/collectd.d/snmp.conf
-cp %{SOURCE97} %{buildroot}%{_sysconfdir}/collectd.d/rrdtool.conf
-
-# configs for subpackaged plugins
-%ifnarch s390 s390x
-for p in dns ipmi libvirt nut perl ping postgresql
-%else
-for p in dns ipmi libvirt perl ping postgresql
-%endif
-do
-%{__cat} > %{buildroot}%{_sysconfdir}/collectd.d/$p.conf <<EOF
-LoadPlugin $p
-EOF
-done
+mkdir -p %{buildroot}%{_sysconfdir}/collectd/plugins
+cp %{SOURCE5} %{buildroot}%{_sysconfdir}/collectd/collectd.conf
+cp %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/collectd
+cp %{SOURCE80} %{buildroot}%{_sysconfdir}/collectd/plugins/aggregation.conf
+cp %{SOURCE81} %{buildroot}%{_sysconfdir}/collectd/plugins/cpu.conf
+cp %{SOURCE82} %{buildroot}%{_sysconfdir}/collectd/plugins/df.conf
+cp %{SOURCE83} %{buildroot}%{_sysconfdir}/collectd/plugins/disk.conf
+cp %{SOURCE84} %{buildroot}%{_sysconfdir}/collectd/plugins/interface.conf
+cp %{SOURCE85} %{buildroot}%{_sysconfdir}/collectd/plugins/load.conf
+cp %{SOURCE86} %{buildroot}%{_sysconfdir}/collectd/plugins/logfile.conf
+cp %{SOURCE87} %{buildroot}%{_sysconfdir}/collectd/plugins/memory.conf
+cp %{SOURCE89} %{buildroot}%{_sysconfdir}/collectd/plugins/processes.conf
+cp %{SOURCE90} %{buildroot}%{_sysconfdir}/collectd/plugins/statsd.conf
+cp %{SOURCE91} %{buildroot}%{_sysconfdir}/collectd/plugins/swap.conf
+cp %{SOURCE92} %{buildroot}%{_sysconfdir}/collectd/plugins/tcpconns.conf
+cp %{SOURCE93} %{buildroot}%{_sysconfdir}/collectd/thresholds.conf
 
 # *.la files shouldn't be distributed.
 rm -f %{buildroot}/%{_libdir}/{collectd/,}*.la
 
-
 %post
 /sbin/ldconfig
 /sbin/chkconfig --add collectd
-
 
 %preun
 if [ $1 -eq 0 ]; then
@@ -511,25 +503,21 @@ if [ $1 -ge 1 ]; then
 fi
 
 %files
-%config(noreplace) %{_sysconfdir}/collectd.conf
-%config(noreplace) %{_sysconfdir}/collectd.d/
-%exclude %{_sysconfdir}/collectd.d/apache.conf
-%exclude %{_sysconfdir}/collectd.d/dns.conf
-%exclude %{_sysconfdir}/collectd.d/email.conf
-%exclude %{_sysconfdir}/collectd.d/ipmi.conf
-%exclude %{_sysconfdir}/collectd.d/libvirt.conf
-%exclude %{_sysconfdir}/collectd.d/mysql.conf
-%exclude %{_sysconfdir}/collectd.d/nginx.conf
-%ifnarch s390 s390x
-%exclude %{_sysconfdir}/collectd.d/nut.conf
-%endif
-%exclude %{_sysconfdir}/collectd.d/perl.conf
-%exclude %{_sysconfdir}/collectd.d/ping.conf
-%exclude %{_sysconfdir}/collectd.d/postgresql.conf
-%exclude %{_datadir}/collectd/postgresql_default.conf
-%exclude %{_sysconfdir}/collectd.d/rrdtool.conf
-%exclude %{_sysconfdir}/collectd.d/sensors.conf
-%exclude %{_sysconfdir}/collectd.d/snmp.conf
+%exclude %{_sysconfdir}/collectd.conf
+%{_sysconfdir}/collectd/collectd.conf
+%{_sysconfdir}/collectd/plugins/aggregation.conf
+%{_sysconfdir}/collectd/plugins/cpu.conf
+%{_sysconfdir}/collectd/plugins/df.conf
+%{_sysconfdir}/collectd/plugins/disk.conf
+%{_sysconfdir}/collectd/plugins/interface.conf
+%{_sysconfdir}/collectd/plugins/load.conf
+%{_sysconfdir}/collectd/plugins/logfile.conf
+%{_sysconfdir}/collectd/plugins/memory.conf
+%{_sysconfdir}/collectd/plugins/processes.conf
+%{_sysconfdir}/collectd/plugins/statsd.conf
+%{_sysconfdir}/collectd/plugins/swap.conf
+%{_sysconfdir}/collectd/plugins/tcpconns.conf
+%{_sysconfdir}/collectd/thresholds.conf
 
 %{_initrddir}/collectd
 %{_bindir}/collectd-nagios
@@ -537,6 +525,7 @@ fi
 %{_bindir}/collectd-tg
 %{_sbindir}/collectd
 %{_sbindir}/collectdmon
+%{_sysconfdir}/logrotate.d/collectd
 %dir %{_localstatedir}/lib/collectd/
 
 %dir %{_libdir}/collectd
@@ -641,7 +630,7 @@ fi
 
 %files apache
 %{_libdir}/collectd/apache.so
-%config(noreplace) %{_sysconfdir}/collectd.d/apache.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/apache.conf
 
 
 %files ascent
@@ -670,12 +659,12 @@ fi
 
 %files dns
 %{_libdir}/collectd/dns.so
-%config(noreplace) %{_sysconfdir}/collectd.d/dns.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/dns.conf
 
 
 %files email
 %{_libdir}/collectd/email.so
-%config(noreplace) %{_sysconfdir}/collectd.d/email.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/email.conf
 %doc %{_mandir}/man5/collectd-email.5*
 
 
@@ -689,7 +678,7 @@ fi
 
 %files ipmi
 %{_libdir}/collectd/ipmi.so
-%config(noreplace) %{_sysconfdir}/collectd.d/ipmi.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/ipmi.conf
 
 
 %files iptables
@@ -720,7 +709,7 @@ fi
 
 %files mysql
 %{_libdir}/collectd/mysql.so
-%config(noreplace) %{_sysconfdir}/collectd.d/mysql.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/mysql.conf
 
 
 %files netlink
@@ -729,7 +718,7 @@ fi
 
 %files nginx
 %{_libdir}/collectd/nginx.so
-%config(noreplace) %{_sysconfdir}/collectd.d/nginx.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/nginx.conf
 
 
 %files notify_desktop
@@ -743,7 +732,7 @@ fi
 %ifnarch s390 s390x
 %files nut
 %{_libdir}/collectd/nut.so
-%config(noreplace) %{_sysconfdir}/collectd.d/nut.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/nut.conf
 %endif
 
 
@@ -752,7 +741,7 @@ fi
 %{_libdir}/collectd/perl.so
 %{perl_vendorlib}/Collectd.pm
 %{perl_vendorlib}/Collectd/
-%config(noreplace) %{_sysconfdir}/collectd.d/perl.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/perl.conf
 %doc %{_mandir}/man5/collectd-perl.5*
 %doc /usr/share/man/man3/Collectd::Unixsock.3pm*
 
@@ -763,30 +752,30 @@ fi
 
 %files ping
 %{_libdir}/collectd/ping.so
-%config(noreplace) %{_sysconfdir}/collectd.d/ping.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/ping.conf
 
 
 %files postgresql
 %{_libdir}/collectd/postgresql.so
-%config(noreplace) %{_sysconfdir}/collectd.d/postgresql.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/postgresql.conf
 %{_datadir}/collectd/postgresql_default.conf
 
 
 %files rrdtool
 %{_libdir}/collectd/rrdtool.so
-%config(noreplace) %{_sysconfdir}/collectd.d/rrdtool.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/rrdtool.conf
 
 
 %ifnarch ppc ppc64 sparc sparc64
 %files sensors
 %{_libdir}/collectd/sensors.so
-%config(noreplace) %{_sysconfdir}/collectd.d/sensors.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/sensors.conf
 %endif
 
 
 %files snmp
 %{_libdir}/collectd/snmp.so
-%config(noreplace) %{_sysconfdir}/collectd.d/snmp.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/snmp.conf
 %doc %{_mandir}/man5/collectd-snmp.5*
 
 
@@ -797,14 +786,8 @@ fi
 %ifnarch ppc ppc64 sparc sparc64
 %files virt
 %{_libdir}/collectd/libvirt.so
-%config(noreplace) %{_sysconfdir}/collectd.d/libvirt.conf
+#%config(noreplace) %{_sysconfdir}/collectd.d/libvirt.conf
 %endif
-
-
-%files web
-%{_datadir}/collectd/collection3/
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/collectd.conf
-%config(noreplace) %{_sysconfdir}/collection.conf
 
 
 %files write_riemann

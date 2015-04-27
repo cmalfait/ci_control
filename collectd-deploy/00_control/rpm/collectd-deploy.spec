@@ -1,6 +1,6 @@
 %define debug_package %{nil}
 
-Summary: Collect Deploy - Deploys and configures collectd based on system location
+Summary: Collectd Deploy - Deploys and configures collectd based on system location
 Name: collectd-deploy
 Version: 0.1.0
 Release: 1 
