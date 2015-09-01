@@ -2,7 +2,7 @@
 PKG_NAME=librdkafka
 
 #Package version (for the original source)
-PKG_VERSION=0.8.4
+PKG_VERSION=0.8.6
 
 # Current Ubuntu debian control tarball (if the debian folder is absent we'll use this)
 DEBIAN_CTRL_TARBALL=(n/a)

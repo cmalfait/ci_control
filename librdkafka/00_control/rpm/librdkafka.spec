@@ -1,6 +1,6 @@
 Name:    librdkafka
 # NOTE: Make sure to update this to match rdkafka.h version
-Version: 0.8.4
+Version: 0.8.6
 Release: 0
 %define soname 1
 
