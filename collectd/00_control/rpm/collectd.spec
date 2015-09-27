@@ -2354,7 +2354,6 @@ fi
 %{_sbindir}/collectd
 %{_sbindir}/collectdmon
 %{_datadir}/collectd/types.db
-%{_sysconfdir}/rc.d/init.d/collectd
 %{_libdir}/collectd/aggregation.so
 %{_libdir}/collectd/apcups.so
 %{_libdir}/collectd/battery.so
