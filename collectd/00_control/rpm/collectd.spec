@@ -1727,7 +1727,7 @@ rm -rf %{buildroot}
 %{__make} install DESTDIR=%{buildroot}
 %{__install} -Dp -m0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/collectd
 %if 0%{?el7:1}
-%{__install} -Dp -m0644 contrib/systemd.collectd.service %{buildroot}%{_unitdir}/collectd.service
+%{__install} -Dp -m0644 %{SOURCE3} %{buildroot}%{_unitdir}/collectd.service
 %else
 %{__install} -Dp -m0755 %{SOURCE4} %{buildroot}%{_initrddir}/collectd
 %endif
