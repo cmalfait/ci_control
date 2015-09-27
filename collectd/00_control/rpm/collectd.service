@@ -5,7 +5,7 @@ Requires=local-fs.target network.target
 
 [Service]
 EnvironmentFile=-/etc/sysconfig/collectd
-ExecStart=/usr/sbin/collectd -C /etc/collectd.conf -f
+ExecStart=/usr/sbin/collectd -C /etc/collectd/collectd.conf -f
 Restart=always
 RestartSec=10
 StandardOutput=syslog
