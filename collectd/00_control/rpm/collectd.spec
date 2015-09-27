@@ -1726,8 +1726,11 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
 rm -rf %{buildroot}
 %{__make} install DESTDIR=%{buildroot}
 %{__install} -Dp -m0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/collectd
+%if 0%{?el7:1}
 %{__install} -Dp -m0644 contrib/systemd.collectd.service %{buildroot}%{_unitdir}/collectd.service
+%else
 %{__install} -Dp -m0755 %{SOURCE4} %{buildroot}%{_initrddir}/collectd
+%endif
 %{__install} -Dp -m0644 src/collectd.conf %{buildroot}%{_sysconfdir}/collectd.conf
 %{__install} -d %{buildroot}%{_sharedstatedir}/collectd/
 %{__install} -d %{buildroot}%{_sysconfdir}/collectd.d/
@@ -1844,7 +1847,6 @@ fi
 %files
 %doc AUTHORS COPYING ChangeLog README
 %config(noreplace) %{_sysconfdir}/collectd.conf
-%{_initrddir}/collectd
 %{_sbindir}/collectd
 %{_sbindir}/collectdmon
 %{_datadir}/collectd/types.db
@@ -2344,7 +2346,11 @@ fi
 
 %files
 %exclude %{_sysconfdir}/collectd.conf
+%if 0%{?el7:1}
 %{_unitdir}/collectd.service
+%else
+%{_initrddir}/collectd
+%endif
 %{_sbindir}/collectd
 %{_sbindir}/collectdmon
 %{_datadir}/collectd/types.db
